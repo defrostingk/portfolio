@@ -301,6 +301,9 @@ p {
 
 .work__categories {
   margin: 40px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .category__btn {
