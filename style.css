@@ -164,7 +164,7 @@ p {
 }
 
 .section__container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: auto;
 }
 
@@ -208,6 +208,10 @@ p {
 .job {
   display: flex;
   align-items: center;
+}
+
+.job__logo {
+  width: 150px;
 }
 
 .job__description {
