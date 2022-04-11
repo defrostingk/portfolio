@@ -25,7 +25,7 @@ navbarMenu.addEventListener('click', (event) => {
 function scrollToElementById(id) {
   const target = document.getElementById(id);
   const targetY = target.getBoundingClientRect().y;
-  const distance = window.pageYOffset + targetY - navbarHeight;
+  const distance = window.scrollY + targetY - navbarHeight;
   window.scroll({
     top: distance,
     left: 0,
@@ -44,8 +44,24 @@ const home = document.querySelector('#home');
 const homeHeight = home.getBoundingClientRect().height;
 const homeSectionContainer = home.querySelector('.section__container');
 
+document.addEventListener(
+  'scroll',
+  () =>
+    (homeSectionContainer.style.opacity =
+      (homeHeight - window.scrollY) / homeHeight)
+);
+
+// Show 'arrow up' button when scrolling down
+const arrowUpBtn = document.querySelector('.navbar__arrow-up-btn');
+const HOME_ID = 'home';
+
 document.addEventListener('scroll', () => {
-  const rate = (homeHeight - window.scrollY) / homeHeight;
-  if (rate < 0) rate = 0;
-  homeSectionContainer.style.opacity = rate;
+  if (window.scrollY > homeHeight / 2) {
+    arrowUpBtn.classList.add('visible');
+  } else {
+    arrowUpBtn.classList.remove('visible');
+  }
 });
+
+// Handle click on the 'arrow up' button
+arrowUpBtn.addEventListener('click', () => scrollToElementById(HOME_ID));

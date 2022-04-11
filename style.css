@@ -144,6 +144,26 @@ p {
   display: none;
 }
 
+.navbar__arrow-up-btn {
+  color: var(--color-white);
+  background-color: var(--color-pink);
+  width: 40px;
+  height: 40px;
+  font-size: 32px;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transition: all var(--animation-duration) ease-in;
+  transform: translateY(60px);
+  opacity: 0;
+}
+
+.navbar__arrow-up-btn.visible {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 /* Home */
 #home {
   background: url('imgs/home-background.png') center/cover no-repeat;
@@ -190,6 +210,10 @@ p {
   display: flex;
   justify-content: space-between;
   margin: 80px 0;
+}
+
+.major {
+  padding: 0 10px;
 }
 
 .major__icon {
