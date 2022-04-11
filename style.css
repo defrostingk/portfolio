@@ -103,13 +103,13 @@ p {
   justify-content: space-between;
   align-items: center;
   color: var(--color-white);
-  padding: 16px;
+  padding: 8px 16px;
   transition: all var(--animation-duration) ease-in-out;
+  z-index: 99;
 }
 
 #navbar.navbar--dark {
   background-color: var(--color-pink);
-  padding: 8px 16px;
 }
 
 .navbar__menu {
