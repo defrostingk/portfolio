@@ -75,6 +75,14 @@ categories.addEventListener('click', (event) => {
   const category =
     event.target.dataset.category || event.target.parentNode.dataset.category;
   if (!category) return;
+
+  // Remove selection from the previous item and select the new one
+  const selected = document.querySelector('.category__btn.selected');
+  selected.classList.remove('selected');
+  const target =
+    event.target.nodeName === 'BUTTON' ? event.target : event.target.parentNode;
+  target.classList.add('selected');
+
   projectContainer.classList.add('anim-out');
   setTimeout(() => {
     projects.forEach((project) => {
