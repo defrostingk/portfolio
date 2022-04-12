@@ -5,7 +5,7 @@ const navbar = document.querySelector('#navbar');
 const navbarHeight = navbar.getBoundingClientRect().height;
 
 // Make navbar transparent when it is on the top
-document.addEventListener('scroll', () => {
+window.addEventListener('scroll', () => {
   if (window.scrollY > navbarHeight) {
     navbar.classList.add('navbar--dark');
   } else {
@@ -17,23 +17,12 @@ document.addEventListener('scroll', () => {
 const navbarMenu = document.querySelector('.navbar__menu');
 
 navbarMenu.addEventListener('click', (event) => {
-  const id = event.target.dataset.section;
+  const target = event.target;
+  const id = target.dataset.section;
   if (!id) return;
   navbarMenu.classList.remove('open');
   scrollToElementById(id);
 });
-
-function scrollToElementById(id) {
-  const target = document.getElementById(id);
-  const targetY = target.getBoundingClientRect().y;
-  const navbarHeight = navbar.getBoundingClientRect().height;
-  const distance = window.scrollY + targetY - navbarHeight;
-  window.scroll({
-    top: distance,
-    left: window.scrollX,
-    behavior: 'smooth',
-  });
-}
 
 // Navbar toggle button for small screen
 const navbarToggleBtn = document.querySelector('.navbar__toggle-btn');
@@ -53,7 +42,7 @@ const home = document.querySelector('#home');
 const homeHeight = home.getBoundingClientRect().height;
 const homeSectionContainer = home.querySelector('.section__container');
 
-document.addEventListener(
+window.addEventListener(
   'scroll',
   () =>
     (homeSectionContainer.style.opacity =
@@ -64,7 +53,7 @@ document.addEventListener(
 const arrowUpBtn = document.querySelector('.navbar__arrow-up-btn');
 const HOME_ID = 'home';
 
-document.addEventListener('scroll', () => {
+window.addEventListener('scroll', () => {
   if (window.scrollY > homeHeight / 2) {
     arrowUpBtn.classList.add('visible');
   } else {
@@ -105,4 +94,72 @@ categories.addEventListener('click', (event) => {
 
     projectContainer.classList.remove('anim-out');
   }, 300);
+});
+
+// Scroll and make navbar menu active
+const sectionIds = [
+  'home',
+  'about',
+  'skills',
+  'work',
+  'testimonials',
+  'contact',
+];
+const sections = sectionIds.map((id) => document.getElementById(id));
+const navItems = sectionIds.map((id) =>
+  document.querySelector(`[data-section="${id}"]`)
+);
+const MARGIN_VALUE = 20;
+let selectedNavIndex = 0;
+let selectedNavItem = navItems[0];
+
+function scrollToElementById(id) {
+  const target = document.getElementById(id);
+  const targetY = target.getBoundingClientRect().y;
+  const navbarHeight = navbar.getBoundingClientRect().height;
+  const distance = window.scrollY + targetY - navbarHeight;
+  window.scroll({
+    top: distance,
+    left: window.scrollX,
+    behavior: 'smooth',
+  });
+  selectNavItems(navItems[sectionIds.indexOf(id)]);
+}
+
+function selectNavItems(selected) {
+  selectedNavItem.classList.remove('active');
+  selectedNavItem = selected;
+  selectedNavItem.classList.add('active');
+}
+const observerOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.3,
+};
+const observerCallback = (entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting && entry.intersectionRatio > 0) {
+      const index = sectionIds.indexOf(entry.target.id);
+      // scroll down
+      if (entry.boundingClientRect.y < 0) {
+        selectedNavIndex = index + 1;
+      } else {
+        selectedNavIndex = index - 1;
+      }
+    }
+  });
+};
+const observer = new IntersectionObserver(observerCallback, observerOptions);
+sections.forEach((section) => observer.observe(section));
+
+window.addEventListener('wheel', () => {
+  if (window.scrollY < homeHeight * 0.3) {
+    selectedNavIndex = 0;
+  } else if (
+    window.scrollY + MARGIN_VALUE >=
+    document.body.clientHeight - window.innerHeight
+  ) {
+    selectedNavIndex = navItems.length - 1;
+  }
+  selectNavItems(navItems[selectedNavIndex]);
 });
