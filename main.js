@@ -28,7 +28,7 @@ function scrollToElementById(id) {
   const distance = window.scrollY + targetY - navbarHeight;
   window.scroll({
     top: distance,
-    left: 0,
+    left: window.scrollX,
     behavior: 'smooth',
   });
 }
@@ -65,3 +65,27 @@ document.addEventListener('scroll', () => {
 
 // Handle click on the 'arrow up' button
 arrowUpBtn.addEventListener('click', () => scrollToElementById(HOME_ID));
+
+// Handle click categories
+const categories = document.querySelector('.work__categories');
+const projectContainer = document.querySelector('.work__projects');
+const projects = document.querySelectorAll('.project');
+
+categories.addEventListener('click', (event) => {
+  const category =
+    event.target.dataset.category || event.target.parentNode.dataset.category;
+  if (!category) return;
+  projectContainer.classList.add('anim-out');
+  setTimeout(() => {
+    projects.forEach((project) => {
+      const { type } = project.dataset;
+      if (category === 'all' || category === type) {
+        project.classList.remove('invisible');
+      } else {
+        project.classList.add('invisible');
+      }
+    });
+
+    projectContainer.classList.remove('anim-out');
+  }, 300);
+});
