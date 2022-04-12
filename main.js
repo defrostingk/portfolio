@@ -26,6 +26,7 @@ navbarMenu.addEventListener('click', (event) => {
 function scrollToElementById(id) {
   const target = document.getElementById(id);
   const targetY = target.getBoundingClientRect().y;
+  const navbarHeight = navbar.getBoundingClientRect().height;
   const distance = window.scrollY + targetY - navbarHeight;
   window.scroll({
     top: distance,
